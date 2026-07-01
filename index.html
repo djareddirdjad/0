@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ENIGMA — Field Cipher Machine Replica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="dossier">
+
+  <header class="dossier-head">
+    <div class="stamp">REPLICA · NON-OPERATIONAL</div>
+    <h1>ENIGMA</h1>
+    <p class="subtitle">Field Cipher Machine — Wehrmacht Model I / M3, faithfully reconstructed</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="machine">01 · MACHINE</button>
+    <button class="tab" data-tab="bombe">02 · BOMBE ATTACK</button>
+  </nav>
+
+  <!-- ======================= MACHINE VIEW ======================= -->
+  <section class="view" id="view-machine">
+
+    <div class="signal-panel">
+      <svg id="signal-path" viewBox="0 0 900 220" class="signal-svg"></svg>
+      <div class="signal-caption">signal path — plugboard → rotors → reflector → rotors → plugboard</div>
+    </div>
+
+    <div class="rotor-rack" id="rotor-rack">
+      <!-- filled by ui.js: 3 rotor windows -->
+    </div>
+
+    <div class="io-grid">
+      <div class="board keyboard" id="keyboard"></div>
+      <div class="board lampboard" id="lampboard"></div>
+    </div>
+
+    <div class="ticker-wrap">
+      <label for="ticker">OUTPUT</label>
+      <div class="ticker" id="ticker"></div>
+      <button id="clear-ticker" class="btn-ghost">clear</button>
+    </div>
+
+    <details class="settings">
+      <summary>SETTINGS — rotor order, rings, plugboard, reflector</summary>
+      <div class="settings-grid">
+
+        <div class="setting-block">
+          <h3>Rotor order (left → right)</h3>
+          <div class="rotor-selects" id="rotor-selects"></div>
+        </div>
+
+        <div class="setting-block">
+          <h3>Ring settings (Ringstellung)</h3>
+          <div class="ring-selects" id="ring-selects"></div>
+        </div>
+
+        <div class="setting-block">
+          <h3>Reflector</h3>
+          <select id="reflector-select">
+            <option value="B">UKW-B</option>
+            <option value="C">UKW-C</option>
+          </select>
+        </div>
+
+        <div class="setting-block plugboard-block">
+          <h3>Plugboard (Steckerbrett) — click pairs of letters</h3>
+          <div class="plugboard" id="plugboard"></div>
+          <div class="plug-pairs" id="plug-pairs-list"></div>
+        </div>
+
+        <button id="reset-machine" class="btn-primary">Apply &amp; reset rotors</button>
+      </div>
+    </details>
+
+  </section>
+
+  <!-- ======================= BOMBE VIEW ======================= -->
+  <section class="view hidden" id="view-bombe">
+
+    <p class="bombe-intro">
+      Given intercepted ciphertext and a suspected crib (a guessed fragment of plaintext),
+      find rotor settings consistent with a closed loop in the crib graph — the same
+      plugboard-independent trick behind Turing's Bombe at Bletchley Park.
+    </p>
+
+    <div class="bombe-inputs">
+      <label>Ciphertext
+        <input type="text" id="bombe-cipher" placeholder="e.g. QWSFTAKXNVPOZULMDCEHYJRGIB..." />
+      </label>
+      <label>Crib (suspected plaintext)
+        <input type="text" id="bombe-crib" placeholder="e.g. WETTERBERICHT" />
+      </label>
+      <button id="find-alignments" class="btn-primary">Find valid alignments</button>
+    </div>
+
+    <div id="alignments-out" class="alignments-out"></div>
+
+    <div id="loop-out" class="loop-out hidden">
+      <h3>Menu (crib graph loop found)</h3>
+      <div id="loop-diagram" class="loop-diagram"></div>
+
+      <div class="setting-block">
+        <h3>Rotors in play</h3>
+        <div class="rotor-pool" id="rotor-pool"></div>
+      </div>
+
+      <button id="run-bombe" class="btn-primary">Run Bombe search</button>
+      <div class="progress-wrap hidden" id="progress-wrap">
+        <div class="progress-bar" id="progress-bar"></div>
+        <span id="progress-label">0%</span>
+      </div>
+    </div>
+
+    <div id="bombe-results" class="bombe-results"></div>
+
+  </section>
+
+  <footer class="dossier-foot">
+    Rotor wirings, notch positions and reflector permutations are the real
+    historical Enigma I / M3 specifications. Ring settings are held at A during
+    Bombe search, as period cryptanalysts determined those separately.
+  </footer>
+
+</div>
+
+<script type="module" src="js/ui.js"></script>
+</body>
+</html>
